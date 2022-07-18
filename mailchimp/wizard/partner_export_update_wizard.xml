@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="mailchimp_export_update_view_form" model="ir.ui.view">
+        <field name="name">partner.export.mailchimp.form</field>
+        <field name="model">partner.export.mailchimp</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group invisible="context.get('update_in_mailchimp', False)">
+                        <field name="odoo_list_ids" required="not context.get('update_in_mailchimp', False)" widget="many2many_tags"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <group>
+                        <span>
+                            <button string="Update" invisible="not context.get('update_in_mailchimp', False)" type="object" class="oe_highlight" name="action_update_partner_mailchimp"/>
+                            <button string="Export" invisible="context.get('update_in_mailchimp', False)" type="object" class="oe_highlight" name="action_export_partner_mailchimp"/>
+                            <button string="Cancel" class="oe_link" special="cancel" />
+                        </span>
+                    </group>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="mailchimp_export_update_form_action" model="ir.actions.act_window">
+        <field name="name">Export to MailChimp</field>
+        <field name="res_model">partner.export.mailchimp</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Add action entry in the Action Menu for Partners -->
+
+    <record id="mailchimp_export_action" model="ir.actions.act_window">
+        <field name="name">Export to MailChimp</field>
+        <field name="res_model">partner.export.mailchimp</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="binding_view_types">form,list</field>
+    </record>
+
+    <record id="mailchimp_update_action" model="ir.actions.act_window">
+        <field name="name">Update to MailChimp</field>
+        <field name="res_model">partner.export.mailchimp</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="binding_view_types">form,list</field>
+        <field name="context">{'update_in_mailchimp': True}</field>
+    </record>
+
+<!--    <act_window id="mailchimp_export_action"-->
+<!--                name="Export to MailChimp"-->
+<!--                res_model="partner.export.mailchimp"-->
+<!--                binding_model="res.partner"-->
+<!--                binding_views="form"-->
+<!--                view_mode="form"-->
+<!--                target="new"/>-->
+
+<!--    <act_window id="mailchimp_update_action"-->
+<!--                name="Update to MailChimp"-->
+<!--                res_model="partner.export.mailchimp"-->
+<!--                binding_model="res.partner"-->
+<!--                binding_views="form"-->
+<!--                view_mode="form"-->
+<!--                context="{'update_in_mailchimp': True}"-->
+<!--                target="new"/>-->
+</odoo>

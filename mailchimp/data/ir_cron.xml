@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="fetch_email_activity" model="ir.cron">
+            <field name="name">Do Not Delete : Fetch Campaigns Reports From MailChimp</field>
+            <field name="model_id" ref="mass_mailing.model_mailing_mailing"/>
+            <field name="state">code</field>
+            <field name="code">model.fetch_email_activity()</field>
+            <field name='interval_number'>1</field>
+            <field name='interval_type'>hours</field>
+            <field name="numbercall">-1</field>
+            <field name="active">1</field>
+        </record>
+
+        <record id="fetch_member" model="ir.cron">
+            <field name="name">Do Not Delete : Fetch MailChimp Audience</field>
+            <field name="model_id" ref="mailchimp.model_mailchimp_lists"/>
+            <field name="state">code</field>
+            <field name="code">model.fetch_member_cron()</field>
+            <field name='interval_number'>1</field>
+            <field name='interval_type'>hours</field>
+            <field name="numbercall">-1</field>
+            <field name="active">1</field>
+        </record>
+
+        <record id="auto_export_member_to_list" model="ir.cron">
+            <field name="name">Do Not Delete : Auto Export Contact to MailChimp List</field>
+            <field name="model_id" ref="mailchimp.model_mailchimp_lists"/>
+            <field name="state">code</field>
+            <field name="code">model.search([('auto_export_contact', '=', True)]).auto_export_member_to_list()</field>
+            <field name='interval_number'>1</field>
+            <field name='interval_type'>hours</field>
+            <field name="numbercall">-1</field>
+        </record>
+
+        <!--Used to create member based on member storage response-->
+        <record id="process_queue_response_data" model="ir.cron">
+            <field name="name">Do Not Delete : Process Queue Jobs (MailChimp)</field>
+            <field name="model_id" ref="mailchimp.model_mailchimp_queue_process"/>
+            <field name="state">code</field>
+            <field name="code">model.process_queue_response_data()</field>
+            <field name='interval_number'>10</field>
+            <field name='interval_type'>minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="active">1</field>
+        </record>
+
+    </data>
+</odoo>

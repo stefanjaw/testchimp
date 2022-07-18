@@ -1,0 +1,16 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mailchimp_accounts_public,mailchimp.accounts,mailchimp.model_mailchimp_accounts,,1,0,0,0
+access_mailchimp_lists_public,mailchimp.lists,mailchimp.model_mailchimp_lists,,1,0,0,0
+access_mailchimp_lists_stats_public,mailchimp.lists.stats,mailchimp.model_mailchimp_lists_stats,,1,0,0,0
+access_mailchimp_templates_public,mailchimp.templates,mailchimp.model_mailchimp_templates,,1,0,0,0
+access_mailchimp_accounts_user,mailchimp.accounts.user,mailchimp.model_mailchimp_accounts,mass_mailing.group_mass_mailing_user,1,1,1,1
+access_mailchimp_lists_user,mailchimp.lists.user,mailchimp.model_mailchimp_lists,mass_mailing.group_mass_mailing_user,1,1,1,1
+access_mailchimp_lists_stats_user,mailchimp.lists.stats.user,mailchimp.model_mailchimp_lists_stats,mass_mailing.group_mass_mailing_user,1,1,1,1
+access_mailchimp_templates_user,mailchimp.templates.user,mailchimp.model_mailchimp_templates,mass_mailing.group_mass_mailing_user,1,1,1,1
+access_mailchimp_segments_public,mailchimp.segments,mailchimp.model_mailchimp_segments,,1,0,0,0
+access_mailchimp_segments_user,mailchimp.segments.user,mailchimp.model_mailchimp_segments,mass_mailing.group_mass_mailing_user,1,1,1,1
+access_mailchimp_merge_fields_public,mailchimp.merge.fields,mailchimp.model_mailchimp_merge_fields,,1,0,0,0
+access_mailchimp_merge_fields_user,mailchimp.merge.fields.user,mailchimp.model_mailchimp_merge_fields,mass_mailing.group_mass_mailing_user,1,1,1,1
+access_mailchimp_queue_process_user,mailchimp.queue.process,mailchimp.model_mailchimp_queue_process,mass_mailing.group_mass_mailing_user,1,1,1,1
+access_mailchimp_import_export_operation,mailchimp.import.export.operation,model_mailchimp_import_export_operation,,1,1,1,1
+access_partner_export_mailchimp,partner.export.mailchimp,model_partner_export_mailchimp,,1,1,1,1

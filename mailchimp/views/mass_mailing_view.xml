@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_mail_mass_mailing_form" model="ir.ui.view">
+            <field name="name">mailing.mailing.form</field>
+            <field name="model">mailing.mailing</field>
+            <field name="inherit_id" ref="mass_mailing.view_mail_mass_mailing_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/group[1]" position="inside">
+                    <label for="mailchimp_template_id" string="MailChimp Template"/>
+                    <div>
+                        <field name="mailchimp_template_id" nolabel="1"/>
+                    </div>
+                    <label for="mailchimp_segment_id"/>
+                    <div>
+                        <field name="mailchimp_list_id" invisible="1"/>
+                        <field name="mailchimp_segment_id" nolabel="1" domain="[('list_id','=', mailchimp_list_id)]"/>
+                    </div>
+                    <label for="mailchimp_champ_type" string="Type" attrs="{'required':[('mailchimp_template_id','!=',False)], 'invisible' : [('mailchimp_template_id','=',False)]}"/>
+                    <div>
+                        <field name="mailchimp_champ_type" nolabel="1" attrs="{'required':[('mailchimp_template_id','!=',False)], 'invisible' : [('mailchimp_template_id','=',False)]}"/>
+                    </div>
+                </xpath>
+                <!--Hide default mail body when selecting mailchimp template if it is exported from odoo to mailchimp then load template data from template-->
+<!--                <field name="body_html" position="attributes">-->
+<!--                    <attribute name="attrs">{'invisible': [('mailchimp_template_id', '!=', False)]}</attribute>-->
+<!--                </field>-->
+                <field name="body_arch" position="attributes">
+                    <attribute name="attrs">{'invisible': [('mailchimp_template_id', '!=', False)]}</attribute>
+                </field>
+                <!-- Show selected template design in campaigns -->
+                <xpath expr="//sheet/notebook/page[@name='mail_body']" position="inside">
+                    <field name="mailchimp_body_html" readonly="1" class="oe_read_only" nolabel="1" widget="html"
+                                    options="{'cssReadonly': 'mass_mailing.iframe_css_assets_readonly'}"
+                        attrs="{'invisible' : [('mailchimp_template_id','=',False)]}"/>
+                    <field name="body_arch" class="o_mail_body oe_edit_only" nolabel="1" widget="mass_mailing_html"
+                                options="{
+                                    'snippets': 'mass_mailing.email_designer_snippets',
+                                    'cssEdit': 'mass_mailing.iframe_css_assets_edit',
+                                    'inline-field': 'mailchimp_body_html'
+                            }" attrs="{'invisible' : [('mailchimp_template_id','=',False)]}"/>
+                </xpath>
+                <div name="button_box" position="inside">
+                    <button class="oe_stat_button" type="action" name="%(mailchimp.action_mailchimp_queue_process)d"
+                            context="{'search_default_campaign_id': [active_id]}"
+                            attrs="{'invisible': [('pending_queue_count', '=', 0)]}" icon="fa-server">
+                        <field string="Queue" name="pending_queue_count" widget="statinfo"/>
+                    </button>
+                </div>
+            </field>
+        </record>
+
+        <record id="mailing_mailing_view_form_full_width" model="ir.ui.view">
+            <field name="name">mailing.mailing.view.form.full.width</field>
+            <field name="model">mailing.mailing</field>
+            <field name="inherit_id" ref="mass_mailing.mailing_mailing_view_form_full_width"/>
+            <field name="arch" type="xml">
+                <field name="is_body_empty" position="after">
+                    <field name="mailchimp_template_id" invisible="1"/>
+                </field>
+                <field name="body_html" position="attributes">
+                    <attribute name="attrs">{'invisible': [('mailchimp_template_id', '!=', False)]}</attribute>
+                </field>
+                <xpath expr="//div[hasclass('o_view_nocontent')]" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|',('mailchimp_template_id', '!=', False),'|', ('is_body_empty', '=', False), ('state', 'in', ('sending', 'done'))]}
+                    </attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_mail_mass_mailing_kanban" model="ir.ui.view">
+            <field name="name">mailing.mailing.kanban</field>
+            <field name="model">mailing.mailing</field>
+            <field name="inherit_id" ref="mass_mailing.view_mail_mass_mailing_kanban"/>
+            <field name="arch" type="xml">
+                <field name="color" position="after">
+                    <field name="mailchimp_id"/>
+                </field>
+                <xpath expr="//div[hasclass('o_kanban_record_headings')]/h3" position="after">
+                    <t t-if="record.mailchimp_id.raw_value">
+                        <span class="badge badge-primary oe_inline o_enterprise_label">
+                            MailChimp
+                        </span>
+                    </t>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

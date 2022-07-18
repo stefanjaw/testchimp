@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="mailchimp_link_tracker_view_tree" model="ir.ui.view">
+            <field name="name">mailchimp.link.tracker.view.tree</field>
+            <field name="model">link.tracker</field>
+            <field name="arch" type="xml">
+                <tree string="Links" sample="1">
+                    <field name="create_date"/>
+                    <field name="title"/>
+                    <field name="label"/>
+                    <field name="url"/>
+                    <field name="short_url" optional="hide"/>
+                    <field name="mailchimp_link_clicks"/>
+                    <button name="action_visit_page" type="object" string="Visit Page" icon="fa-external-link"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

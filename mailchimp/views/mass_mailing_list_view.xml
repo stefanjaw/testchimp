@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mailing_list_view_kanban" model="ir.ui.view">
+            <field name="name">mailing.list.kanban</field>
+            <field name="model">mailing.list</field>
+            <field name="inherit_id" ref="mass_mailing.mailing_list_view_kanban"/>
+            <field name="arch" type="xml">
+                <field name="contact_count" position="after">
+                    <field name="mailchimp_list_id"/>
+                </field>
+                <xpath expr="//h2[hasclass('o_text_overflow')]" position="inside">
+                    <t t-if="record.mailchimp_list_id.raw_value">
+                        <span class="badge badge-primary oe_inline" style="width: 85px;font-size: 10px;padding: 1px;">
+                            MailChimp
+                        </span>
+                    </t>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

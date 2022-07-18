@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mailchimp_queue_process_form_view" model="ir.ui.view">
+            <field name="name">mailchimp.queue.process.form.view</field>
+            <field name="model">mailchimp.queue.process</field>
+            <field name="arch" type="xml">
+                <form string="Mailchimp Job Queue" create="0" edit="0">
+                    <header>
+                        <field name="state" widget="statusbar" statusbar_visible="in_queue,fetched,exception,done"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label class="oe_edit_only" for="name"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="create_date"/>
+                                <field name="operation"/>
+                                <field name="user_id"/>
+                            </group>
+                            <group>
+                                <field name="account_id"/>
+                                <field name="list_id" attrs="{'invisible' : [('operation', '!=', 'contact')]}"/>
+                                <field name="campaign_id" attrs="{'invisible' : [('operation', 'not in', ['click_activity', 'campaign_activity_report'])]}"/>
+                            </group>
+                        </group>
+
+                        <!--Request Data-->
+                        <group string="Request Data">
+                            <group>
+                                <field name="req_url"/>
+                                <field name="req_param"/>
+                                <field name="req_data"/>
+                                <field name="total_items"/>
+                            </group>
+                        </group>
+
+                        <group string="Response Information" groups="base.group_no_one" attrs="{'invisible' : [('state', 'not in', ['fetched','done'])]}">
+                            <field name="response_data" readonly="1" nolabel="1"/>
+                        </group>
+                        <group string="Exception Information" groups="base.group_no_one" attrs="{'invisible' : [('state', '!=', 'exception')]}">
+                            <field name="exception_message" readonly="1" nolabel="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="mailchimp_queue_process_tree_view" model="ir.ui.view">
+            <field name="name">mailchimp.queue.process.tree.view</field>
+            <field name="model">mailchimp.queue.process</field>
+            <field name="arch" type="xml">
+                <tree string="Mailchimp Job Queue" decoration-info="state == 'fetched'" decoration-success="state == 'done'" decoration-muted="state == 'in_queue'" decoration-danger="state == 'exception'">
+                    <field name="name"/>
+                    <field name="create_date"/>
+                    <field name="account_id"/>
+                    <field name="operation"/>
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="mailchimp_queue_process_search_view" model="ir.ui.view">
+            <field name="name">mailchimp.queue.process.search.view</field>
+            <field name="model">mailchimp.queue.process</field>
+            <field name="arch" type="xml">
+                <search string="Mailchimp Job Queue">
+                    <field name="name" string="Name"/>
+                    <field name="list_id" string="Audience" />
+                    <field name="campaign_id" string="Campaign" />
+                    <filter string="In Queue or Pending" name="in_queue_or_pending" domain="['|',('state', '=', 'fetched'), ('state', '=', 'in_queue')]"/>
+                    <filter string="In Queue" name="in_queue" domain="[('state', '=', 'in_queue')]"/>
+                    <filter string="Fetched" name="Fetched" domain="[('state', '=', 'fetched')]"/>
+                    <filter name="completed" string="Completed" domain="[('state', '=', 'done')]"/>
+                    <filter name="exception" string="Exception" domain="[('state', '=', 'exception')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Account" name="group_by_account_id" domain="[]" context="{'group_by': 'account_id'}"/>
+                        <filter string="Operation" name="group_by_operation" domain="[]" context="{'group_by': 'operation'}"/>
+                        <filter string="List" name="group_by_list_id" domain="[]" context="{'group_by': 'list_id'}"/>
+                        <filter string="Campaign" name="group_by_campaign_id" domain="[]" context="{'group_by': 'campaign_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_mailchimp_queue_process" model="ir.actions.act_window">
+            <field name="name">Job Queue</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">mailchimp.queue.process</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="mailchimp_queue_process_search_view"/>
+            <field name="context">{'search_default_in_queue_or_pending': 1}</field>
+        </record>
+
+        <menuitem name="Job Queue" parent="menu_mailchimp_root"
+                  action="action_mailchimp_queue_process" id="menu_action_mailchimp_queue_process"
+                  sequence="100"/>
+    </data>
+</odoo>
