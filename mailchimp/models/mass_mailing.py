@@ -331,6 +331,10 @@ class MassMailing(models.Model):
         campaigns_list = []
         while True:
             prepared_vals = {'count': count, 'offset': offset}
+            since_date = self._context.get('camp_since_last_changed') or account.camp_since_last_changed
+            if since_date:
+                member_since_last_changed = since_date - timedelta(minutes=10)
+                prepared_vals.update({'since_create_time': member_since_last_changed.strftime("%Y-%m-%dT%H:%M:%S+00:00")})
             response = account._send_request('campaigns', {}, params=prepared_vals)
             if len(response.get('campaigns')) == 0:
                 break
@@ -340,6 +344,7 @@ class MassMailing(models.Model):
             offset = offset + 1000
         for campaigns_dict in campaigns_list:
             self.create_or_update_campaigns(campaigns_dict, account=account)
+        account.camp_since_last_changed = fields.Datetime.now()
         return True
 
     @api.model

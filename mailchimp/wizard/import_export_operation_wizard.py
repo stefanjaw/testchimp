@@ -13,12 +13,13 @@ class ImportExportOperation(models.TransientModel):
     get_lists = fields.Boolean("Lists/Audiences", help="Obtains available lists from MailChimp")
     get_templates = fields.Boolean("Templates", help="Get a list of an account's available templates.")
     get_campaigns = fields.Boolean("Campaigns", help="Get a list of campaigns.")
+    camp_since_last_changed = fields.Datetime("Fetch Campaigns Since Last Change", copy=False)
 
     @api.model
     def default_get(self, fields):
         res = super(ImportExportOperation, self).default_get(fields)
-        accounts = self.env['mailchimp.accounts'].search([])
-        res.update({'account_ids': [(6, 0, accounts.ids)]})
+        account = self.env['mailchimp.accounts'].search([],limit=1)
+        res.update({'account_ids': [(6, 0, account.ids)],'camp_since_last_changed':account.camp_since_last_changed})
         return res
 
 
@@ -29,5 +30,5 @@ class ImportExportOperation(models.TransientModel):
             if self.get_templates:
                 account.import_templates()
             if self.get_campaigns:
-                account.import_campaigns()
+                account.with_context(camp_since_last_changed=self.camp_since_last_changed).import_campaigns()
         return True

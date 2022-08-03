@@ -33,6 +33,7 @@ class MailChimpAccounts(models.Model):
     webhook_url = fields.Char('Webhook URL')
     webhook_token = fields.Char('Webhook Token',copy=False)
     auto_update_contact = fields.Boolean(string="Auto Update Contact in MailChimp?", copy=False, default=True)
+    camp_since_last_changed = fields.Datetime("Fetch Campaigns Since Last Change", copy=False,help='This date automatically come from a selected MailChimp account if you want you can change it to get campaigns according to this date')
 
     _sql_constraints = [
         ('api_keys_uniq', 'unique(api_key)', 'API keys must be unique per MailChimp Account!'),

@@ -134,6 +134,18 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-6 o_setting_box">
+                                        <div class="o_setting_left_pane"/>
+                                        <div class="o_setting_right_pane">
+                                            <label for="camp_since_last_changed" string="Fetch Campaigns Since Last Change"/>
+                                            <div class="text-muted">
+                                                Fetch campaigns after mentioned date.
+                                            </div>
+                                            <div class="text-muted">
+                                                <field name="camp_since_last_changed"/>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </page>
                         </notebook>
